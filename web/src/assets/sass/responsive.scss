@@ -1,0 +1,25 @@
+@media screen and (max-width: 650px) {
+  .auth-page .bg-fade {
+    padding: 50px 10px;
+  }
+
+  .auth-page .bg-fade .auth-form {
+    width: 100%;
+    padding: 50px 25px;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .auth-page .bg-fade .auth-form .form-header {
+    width: 100px;
+    height: 100px;
+    top: -50px;
+    left: calc(50% - 50px);
+
+    svg {
+      width: 50px;
+    }
+  }
+}

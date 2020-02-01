@@ -1,5 +1,7 @@
 'use strict'
 
+const nanoId = use('nanoid')
+
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
@@ -19,6 +21,10 @@ class User extends Model {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
+
+    this.addHook('beforeCreate', async (userInstance) => {
+      userInstance.token = nanoId(25)
+    })
   }
 
   /**
@@ -33,6 +39,10 @@ class User extends Model {
    */
   tokens () {
     return this.hasMany('App/Models/Token')
+  }
+
+  errors () {
+    return this.hasMany('App/Models/Error')
   }
 }
 

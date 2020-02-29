@@ -7,7 +7,7 @@
     width: 100%;
     padding: 50px 25px;
 
-    input {
+    .form-divisor input {
       width: 100%;
     }
   }
@@ -20,6 +20,15 @@
 
     svg {
       width: 50px;
+    }
+  }
+
+  .auth-page .bg-fade .auth-form .form-options {
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+
+    label {
+      margin-bottom: 15px;
     }
   }
 }

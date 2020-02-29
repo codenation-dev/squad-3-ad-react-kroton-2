@@ -1,3 +1,12 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .auth-page {
   background: url("../images/two-women-looking-at-the-code-at-laptop-1181263.jpg")
     center no-repeat;
@@ -6,9 +15,8 @@
 
   .bg-fade {
     align-items: center;
-    background: rgba($color: #ed2e38, $alpha: 0.9);
+    background: rgba($color: #ed2e38, $alpha: 0.7);
     display: flex;
-    flex-direction: column;
     height: 100%;
     justify-content: center;
     width: 100%;
@@ -17,9 +25,7 @@
       background-color: #ffffff;
       border-radius: 16px;
       box-shadow: 0px 4px 8px rgba($color: #333333, $alpha: 0.3);
-      display: flex;
-      flex-direction: column;
-      padding: 65px 60px 60px;
+      padding: 60px;
       position: relative;
 
       .form-header {
@@ -34,59 +40,96 @@
         top: -75px;
         width: 150px;
 
-        > svg {
+        svg {
           color: #ed2e38;
-          width: 75px;
+          width: 50px;
         }
       }
 
       .form-title {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        text-align: center;
         color: #ed2e38;
+        font-family: "Lato";
+        font-size: 3rem;
         letter-spacing: 1px;
+        position: relative;
+        text-align: center;
+        z-index: 100;
       }
 
-      > label {
-        margin-bottom: 5px;
-        color: #818181;
-        font-weight: bold;
-        letter-spacing: 1px;
-      }
+      .form-divisor {
+        display: flex;
+        flex-direction: column;
+        position: relative;
 
-      > input {
-        border-radius: 4px;
-        border: 2px solid #ebebeb;
-        margin-bottom: 15px;
-        width: 500px;
-        padding: 10px;
-        transition: 0.2s;
+        label {
+          margin-top: 20px;
+          margin-bottom: 10px;
+        }
 
-        &:focus {
-          border-color: #ed2e38;
+        input {
+          border-radius: 4px;
+          border: 2px solid #dbdada;
+          padding: 10px;
+          transition: 0.2s;
+          width: 500px;
+
+          &:focus {
+            border-color: #ed2e38;
+          }
+        }
+
+        p {
+          margin-top: 10px;
+          color: #ed2e38;
+        }
+
+        svg {
+          color: #818181;
+          cursor: pointer;
+          position: absolute;
+          right: 15px;
+          top: 60px;
+          width: 20px;
         }
       }
 
-      > input[type="submit"] {
+      button[type="submit"] {
         background-color: #ed2e38;
         border-radius: 4px;
         border: none;
+        box-shadow: 0px 4px 8px rgba($color: #333333, $alpha: 0.3);
         color: #ffffff;
         cursor: pointer;
+        font-family: "Maven Pro";
         font-weight: bold;
-        margin-bottom: 0px;
-        box-shadow: 0px 4px 8px rgba($color: #333333, $alpha: 0.3);
-        padding: 15px;
-        text-transform: uppercase;
+        height: 50px;
+        transition: 0.2s;
+        width: 100%;
+        margin-top: 20px;
+
+        &:hover {
+          box-shadow: 0px 7px 8px rgba($color: #333333, $alpha: 0.3);
+          transform: translateY(-3px);
+        }
+      }
+
+      .loader {
+        animation: spin 0.75s linear infinite;
+        border-radius: 50%;
+        border: 3px solid #b420283d; /* Light grey */
+        border-top: 3px solid #ffffff; /* Blue */
+        height: 20px;
+        margin: 0 auto;
+        width: 20px;
       }
 
       .form-options {
-        padding-top: 25px;
         display: flex;
         justify-content: space-between;
+        flex-direction: row-reverse;
+        padding-top: 25px;
 
-        .custom_checkBox {
+        .customCheckBox {
           -moz-user-select: none;
           -ms-user-select: none;
           -webkit-user-select: none;
@@ -123,18 +166,18 @@
             width: 25px;
 
             &:after {
-              content: "";
-              position: absolute;
-              display: none;
-              left: 9px;
-              top: 5px;
-              width: 5px;
-              height: 10px;
+              -ms-transform: rotate(45deg);
+              -webkit-transform: rotate(45deg);
               border: solid white;
               border-width: 0 2px 2px 0;
-              -webkit-transform: rotate(45deg);
-              -ms-transform: rotate(45deg);
+              content: "";
+              display: none;
+              height: 10px;
+              left: 9px;
+              position: absolute;
+              top: 5px;
               transform: rotate(45deg);
+              width: 5px;
             }
           }
         }

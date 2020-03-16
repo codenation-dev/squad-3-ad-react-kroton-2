@@ -17,12 +17,13 @@ class ErrorController {
    * @param {object} ctx
    * @param {Request} ctx.auth
    */
-  async index({ auth }) {
+  async index({ auth, request }) {
     const user = await auth.getUser();
+    const { page = 1, perpage = 10 } = request.all();
 
     const errors = await ErrorModel.query()
       .where({ userToken: user.token })
-      .fetch();
+      .paginate(page, perpage);
 
     return errors || [];
   }

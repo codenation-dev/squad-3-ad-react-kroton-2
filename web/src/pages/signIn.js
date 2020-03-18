@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { useLocation, Redirect } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { useLocation, Redirect } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
-import { ReactComponent as Bug } from "../assets/images/bug-solid.svg";
-import { ReactComponent as Eye } from "../assets/images/eye-solid.svg";
-import { ReactComponent as EyeSlash } from "../assets/images/eye-slash-solid.svg";
+import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
+import { ReactComponent as Eye } from '../assets/images/eye-solid.svg';
+import { ReactComponent as EyeSlash } from '../assets/images/eye-slash-solid.svg';
 
-import api from "../services/api";
+import api from '../services/api';
 
-import "./styles.scss";
+import './styles.scss';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -23,7 +23,7 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [errors, setErrors] = useState({});
-  const [cookies, setCookie] = useCookies(["jwt"]);
+  const [cookies, setCookie] = useCookies(['jwt']);
 
   let query = useQuery();
 
@@ -35,19 +35,21 @@ const SignIn = () => {
     setIsLoading(true);
 
     api
-      .post("/auth/signin", data)
+      .post('/auth/signin', data)
       .then(response => {
         if (data.rememberMe) {
-          setCookie("jwt", response.data.token, {
-            path: "/",
+          setCookie('jwt', response.data.token, {
+            path: '/',
             maxAge: 31536000
           });
         } else {
-          setCookie("jwt", response.data.token, {
-            path: "/",
+          setCookie('jwt', response.data.token, {
+            path: '/',
             maxAge: -1
           });
         }
+
+        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
         setRedirect(true);
       })
@@ -60,12 +62,12 @@ const SignIn = () => {
 
         for (let i = 0; i < inputErrors.length; i++) {
           switch (inputErrors[i].field) {
-            case "email":
+            case 'email':
               errorsObj[inputErrors[i].field] =
-                "E-mail não encontrado ou incorreto";
+                'E-mail não encontrado ou incorreto';
               break;
-            case "password":
-              errorsObj[inputErrors[i].field] = "Senha incorreta";
+            case 'password':
+              errorsObj[inputErrors[i].field] = 'Senha incorreta';
               break;
             default:
               errorsObj[inputErrors[i].field] = inputErrors[i].message;
@@ -80,16 +82,16 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    const newUser = query.get("newuser");
+    const newUser = query.get('newuser');
 
     if (newUser) {
-      toast.success("Usuario criado com sucesso!");
+      toast.success('Usuario criado com sucesso!');
     }
 
     if (cookies.jwt) {
       setRedirect(true);
     }
-  }, []);
+  }, [cookies.jwt, query]);
 
   return (
     <section className="auth-page">
@@ -117,7 +119,7 @@ const SignIn = () => {
           <div className="form-divisor">
             <label htmlFor="password">Senha</label>
             <input
-              type={password ? "text" : "password"}
+              type={password ? 'text' : 'password'}
               name="password"
               id="password"
               ref={register}
@@ -134,7 +136,7 @@ const SignIn = () => {
           </div>
 
           <button type="submit">
-            {isLoading ? <div className="loader" /> : "Entrar"}
+            {isLoading ? <div className="loader" /> : 'Entrar'}
           </button>
 
           <div className="form-options">

@@ -1,10 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
-import SignIn from "./pages/signIn";
-import SignUp from "./pages/signUp";
-import Dashboard from "./pages/dashboard";
+import SignIn from './pages/signIn';
+import SignUp from './pages/signUp';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (

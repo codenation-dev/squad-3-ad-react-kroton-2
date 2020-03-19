@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, Redirect } from 'react-router-dom';
@@ -17,6 +18,8 @@ function useQuery() {
 }
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+
   const { register, handleSubmit } = useForm();
 
   const [password, setPassword] = useState(false);
@@ -40,16 +43,21 @@ const SignIn = () => {
         if (data.rememberMe) {
           setCookie('jwt', response.data.token, {
             path: '/',
-            maxAge: 31536000
+            maxAge: 31536000,
           });
         } else {
           setCookie('jwt', response.data.token, {
             path: '/',
-            maxAge: -1
+            maxAge: -1,
           });
         }
 
-        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+        dispatch({
+          type: '@auth/SIGN_IN',
+          payload: {
+            token: response.data.token,
+          },
+        });
 
         setRedirect(true);
       })

@@ -112,7 +112,7 @@ class ErrorController {
   }
 
   /**
-   * Delete a error with id.
+   * Delete an error with id.
    * DELETE errors/:id
    *
    * @param {object} ctx

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useTable, useSortBy } from 'react-table';
+import { useTable, useSortBy, useFilters } from 'react-table';
 
 import styled from 'styled-components'
 
@@ -62,6 +62,34 @@ const Dashboard = () => {
     })();
   }, [auth]);
 
+  function DefaultColumnFilter({
+    column: { filterValue, preFilteredRows, setFilter },
+  }) {
+    const count = preFilteredRows.length
+  
+    return (
+      <input
+        value={filterValue || ''}
+        onChange={e => {
+          setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+        }}
+        onClick={e => {
+          e.stopPropagation();
+        }}
+        placeholder={`Search ${count} records...`}
+      />
+    )
+  }
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
+
+
   function Table({ columns, data }) {
     const {
       getTableProps,
@@ -73,7 +101,9 @@ const Dashboard = () => {
       {
         columns,
         data,
+        defaultColumn
       },
+      useFilters,
       useSortBy
     );
 
@@ -84,7 +114,7 @@ const Dashboard = () => {
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
+                  {column.render('Header')}{} <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>

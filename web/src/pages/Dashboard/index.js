@@ -1,53 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTable, useSortBy, useFilters } from 'react-table';
+import { MdClose } from 'react-icons/md';
 
-import styled from 'styled-components'
+import Header from '../../components/Header';
+import { Container, Modal } from './styles';
 
 import api from '../../services/api';
-
-const Styles = styled.div`
-  padding: 1rem;
-  display: flex;
-  justify-content:center;
-  align-items:center;
-  
-
-  table {
-    border-spacing: 0;
-    width: 80%;
-
-    thead{
-      background-color: #ed2e38;
-      color: white;
-    }
-
-    tbody{
-      background-color: #fff;
-    }
-
-    tr {
-      :nth-child(even) {background-color: #f2f2f2;}
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      text-align: center;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
-
 
 const Dashboard = () => {
   const [errors, setErrors] = useState([]);
@@ -57,7 +16,7 @@ const Dashboard = () => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
     (async function callApi() {
       const data = await api.get('/errors');
-
+      console.log(data)
       if (data) setErrors(data.data.data);
     })();
   }, [auth]);
@@ -66,7 +25,7 @@ const Dashboard = () => {
     column: { filterValue, preFilteredRows, setFilter },
   }) {
     const count = preFilteredRows.length
-  
+
     return (
       <input
         value={filterValue || ''}
@@ -89,6 +48,19 @@ const Dashboard = () => {
     []
   )
 
+  const revealModal = text => {
+    const modal = document.getElementById("modal");
+    const textModal = document.getElementById("modalText");
+
+    modal.style.display = 'block';
+    textModal.textContent = text
+  }
+
+  const closeModal = () => {
+    const modal = document.getElementById("modal")
+
+    modal.style.display = "none";
+  }
 
   function Table({ columns, data }) {
     const {
@@ -108,33 +80,35 @@ const Dashboard = () => {
     );
 
     return (
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}{} <div>{column.canFilter ? column.render('Filter') : null}</div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  );
-                })}
+      <>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}{} <div>{column.canFilter ? column.render('Filter') : null}</div>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row, _) => {
+              prepareRow(row);
+              return (
+                <tr onClick={() => revealModal(row.values.log)} {...row.getRowProps()}>
+                  {row.cells.map(cell => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </>
     );
   }
 
@@ -144,16 +118,29 @@ const Dashboard = () => {
       accessor: 'level',
     },
     {
-      Header: 'Log',
+      Header: 'Descrição do Erro',
       accessor: 'log',
     },
     {
       Header: 'Eventos',
       accessor: 'events',
-    },
+    }
   ];
 
-  return <Styles><Table columns={columns} data={errors}></Table></Styles>;
+  return (
+    <>
+      <Header />
+      <Container>
+        <Table columns={columns} data={errors} />
+        <Modal id="modal">
+          <div>
+            <p id="modalText" />
+            <MdClose onClick={closeModal} size={20} color="#fff" />
+          </div>
+        </Modal>
+      </Container>
+    </>
+  )
 };
 
 export default Dashboard;

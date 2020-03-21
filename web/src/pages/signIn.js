@@ -59,7 +59,18 @@ const SignIn = () => {
         let errorsObj = {};
 
         for (let i = 0; i < inputErrors.length; i++) {
-          errorsObj[inputErrors[i].field] = inputErrors[i].message;
+          switch (inputErrors[i].field) {
+            case "email":
+              errorsObj[inputErrors[i].field] =
+                "E-mail não encontrado ou incorreto";
+              break;
+            case "password":
+              errorsObj[inputErrors[i].field] = "Senha incorreta";
+              break;
+            default:
+              errorsObj[inputErrors[i].field] = inputErrors[i].message;
+              break;
+          }
         }
 
         setErrors(errorsObj);

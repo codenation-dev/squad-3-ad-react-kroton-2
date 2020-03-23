@@ -25,6 +25,8 @@ Factory.blueprint("App/Models/User", async () => {
 
 Factory.blueprint("App/Models/Error", async faker => {
   return {
+    title: faker.sentence({ words: 3 }),
+    environment: faker.pickone(["Produção", "Homologação", "Dev"]),
     errorNumber: faker.pickone([500, 502, 503, 504]),
     events: faker.integer({ min: 1, max: 400 }),
     level: faker.pickone(["Error", "Warning", "Debug"]),

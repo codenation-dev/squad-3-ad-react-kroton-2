@@ -8,6 +8,8 @@ class ErrorSchema extends Schema {
     this.create('errors', (table) => {
       table.increments()
       table.string("userToken", 25).notNullable()
+      table.string("title", 256).notNullable()
+      table.string("environment", 256).notNullable()
       table.integer("errorNumber").notNullable()
       table.integer("events").notNullable()
       table.string("level", 24).notNullable()

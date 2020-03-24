@@ -50,6 +50,23 @@ export const Container = styled.div`
   }
 `
 
+export const Button = styled.button`
+  color: white;
+  background: ${darken(0.03, "#ED2E38")};
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid;
+  margin-right: 7px;
+  margin-bottom: 3px;
+
+  :hover{
+    color: ${darken(0.03, "#ED2E38")};
+    background: white;
+    transition: 0.5s;
+    cursor: pointer;
+  }
+`
+
 export const Modal = styled.div`
   display: none;
   max-width: 600px;

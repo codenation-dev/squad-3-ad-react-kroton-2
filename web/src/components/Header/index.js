@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import { Container, Content, Profile } from './styles';
 
 export default function Header() {
+
+  const handleSignOut = function () {
+
+  }
+
   return (
     <Container>
       <Content>
@@ -12,7 +17,7 @@ export default function Header() {
         <aside>
           <Profile>
             <div>
-              <Link to="/"><strong>Admin Logger</strong></Link>
+              <Link onClick={handleSignOut} to="/"><strong>Admin Logger</strong></Link>
               Sair do sistema
             </div>
           </Profile>

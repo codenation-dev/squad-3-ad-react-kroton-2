@@ -4,7 +4,7 @@
 const Schema = use('Schema')
 
 class ErrorSchema extends Schema {
-  up () {
+  up() {
     this.create('errors', (table) => {
       table.increments()
       table.string("userToken", 25).notNullable()
@@ -12,11 +12,12 @@ class ErrorSchema extends Schema {
       table.integer("events").notNullable()
       table.string("level", 24).notNullable()
       table.string("log", 2024).notNullable()
+      table.boolean("closed").notNullable()
       table.timestamps()
     })
   }
 
-  down () {
+  down() {
     this.drop('errors')
   }
 }

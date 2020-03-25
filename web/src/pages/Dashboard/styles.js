@@ -22,6 +22,11 @@ export const Container = styled.div`
       }
     }
 
+    tr.closedRow {
+      font-style: italic;
+      text-decoration: line-through;
+    }
+
     th {
       padding: 10px;
       background-color: ${darken(0.03, "#ED2E38")};

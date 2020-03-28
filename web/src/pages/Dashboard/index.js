@@ -31,28 +31,6 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 );
 
-// function Table({ columns, data }) {
-// const [selectedRows, setSelectedRows] = useState([]);
-// debugger;
-
-// const revealModal = text => {
-//   const modal = document.getElementById("modal");
-//   const textModal = document.getElementById("modalText");
-
-//   modal.style.display = 'block';
-//   textModal.textContent = text
-// }
-
-// const handleCheck = function (row) {
-//   debugger;
-//   console.log(selectedRowIds);
-//   console.log(row);
-// }
-
-// const handleDelete = function () {
-//   console.log(selectedRows);
-// }
-
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
@@ -60,6 +38,7 @@ function DefaultColumnFilter({
 
   return (
     <input
+      className="default-filter"
       value={filterValue || ''}
       onChange={e => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
@@ -88,6 +67,7 @@ function SelectColumnFilter({
   // Render a multi-select box
   return (
     <select
+      className="select-combo"
       value={filterValue}
       onChange={e => {
         setFilter(e.target.value || undefined);
@@ -113,7 +93,6 @@ function Table({ columns, data, handleDelete, handleClose }) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     selectedFlatRows,
     page,
@@ -169,7 +148,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
     <>
       <div {...getTableProps()}>
         {headerGroups.map((headerGroup, index) => (
-          <div key={index}>
+          <div className="table-head" key={index}>
             <div>
               <div>{headerGroup.headers[1].render('Filter')}</div>
             </div>
@@ -182,7 +161,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
           </div>
         ))}
       </div>
-      <div>
+      <div className="buttons-container">
         <Button
           onClick={() => {
             handleClose(selectedFlatRows);
@@ -233,16 +212,32 @@ function Table({ columns, data, handleDelete, handleClose }) {
         </tbody>
       </table>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <button
+          className="pagination-button"
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+        >
           {'<<'}
         </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button
+          className="pagination-button"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
           {'<'}
         </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button
+          className="pagination-button"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
           {'>'}
         </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <button
+          className="pagination-button"
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
           {'>>'}
         </button>{' '}
         <span>
@@ -255,6 +250,8 @@ function Table({ columns, data, handleDelete, handleClose }) {
           | Go to page:{' '}
           <input
             type="number"
+            min="1"
+            max={`${pageOptions.length}`}
             defaultValue={pageIndex + 1}
             onChange={e => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
@@ -264,6 +261,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
           />
         </span>{' '}
         <select
+          className="select-combo"
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));

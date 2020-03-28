@@ -6,19 +6,19 @@ export const Container = styled.div`
   padding: 40px 80px;
   margin: 0 auto;
   flex-direction: column;
-  
+
   table {
     border-spacing: 0;
     text-align: left;
     border-collapse: separate;
 
-    tbody{
+    tbody {
       background-color: #fff;
     }
 
     tr {
       :nth-child(even) {
-        background-color: ${lighten(0.1, "#ddd")};
+        background-color: ${lighten(0.1, '#ddd')};
       }
     }
 
@@ -29,7 +29,7 @@ export const Container = styled.div`
 
     th {
       padding: 10px;
-      background-color: ${darken(0.03, "#ED2E38")};
+      background-color: ${darken(0.03, '#ED2E38')};
       color: white;
       font-size: 22px;
     }
@@ -53,24 +53,65 @@ export const Container = styled.div`
       text-align: right;
     }
   }
-`
+
+  .table-head {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+  }
+
+  .pagination {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .pagination-button {
+    color: white;
+    background-color: #ed2e38;
+    border: none;
+    padding: 2px 4px;
+  }
+
+  .default-filter {
+    margin: 0;
+    margin-left: 30px;
+    margin-bottom: 5px;
+    border: none;
+    border: 1px solid black;
+    padding: 5px 2px;
+    border-radius: 3px;
+    border-bottom: 3px solid #ed2e38;
+  }
+
+  .buttons-container {
+    margin-bottom: 10px;
+  }
+
+  .select-combo {
+    background-color: #ed2e38;
+    border: none;
+    border-radius: 5px;
+    padding: 4px;
+    color: white;
+  }
+`;
 
 export const Button = styled.button`
   color: white;
-  background: ${darken(0.03, "#ED2E38")};
+  background: ${darken(0.03, '#ED2E38')};
   padding: 5px 12px;
   border-radius: 6px;
   border: 1px solid;
   margin-right: 7px;
   margin-bottom: 3px;
 
-  :hover{
-    color: ${darken(0.03, "#ED2E38")};
+  :hover {
+    color: ${darken(0.03, '#ED2E38')};
     background: white;
     transition: 0.5s;
     cursor: pointer;
   }
-`
+`;
 
 export const Modal = styled.div`
   display: none;
@@ -82,7 +123,7 @@ export const Modal = styled.div`
   border: 1px solid white;
   border-radius: 4px;
   font-size: 16px;
-  background: ${darken(0.03, "#ED2E38")};
+  background: ${darken(0.03, '#ED2E38')};
   color: white;
   top: calc(50% - 300px);
   left: calc(50% - 300px);
@@ -100,9 +141,8 @@ export const Modal = styled.div`
     svg {
       margin: 10px 0;
     }
-    svg:hover{
-        cursor: pointer;
+    svg:hover {
+      cursor: pointer;
     }
   }
 `;
-

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   useTable,
   useSortBy,
@@ -7,7 +7,8 @@ import {
   useRowSelect,
   usePagination,
 } from 'react-table';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdNoEncryption } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import { Container, Modal, Button } from './styles';
@@ -203,7 +204,14 @@ function Table({ columns, data, handleDelete, handleClose }) {
               >
                 {row.cells.map(cell => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td {...cell.getCellProps()}>
+                      <Link
+                        to={`/error/${row.original.id}`}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                      >
+                        {cell.render('Cell')}
+                      </Link>
+                    </td>
                   );
                 })}
               </tr>

@@ -8,32 +8,26 @@ import { Container, Modal, Button } from './styles';
 
 import api from '../../services/api';
 
-
-
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
+    const defaultRef = React.useRef();
+    const resolvedRef = ref || defaultRef;
 
     React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
 
     return (
       <>
         <input type="checkbox" ref={resolvedRef} {...rest} />
       </>
-    )
+    );
   }
-)
-
-
+);
 
 // function Table({ columns, data }) {
 // const [selectedRows, setSelectedRows] = useState([]);
 // debugger;
-
-
 
 // const revealModal = text => {
 //   const modal = document.getElementById("modal");
@@ -53,33 +47,29 @@ const IndeterminateCheckbox = React.forwardRef(
 //   console.log(selectedRows);
 // }
 
-
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
-  const count = preFilteredRows.length
+  const count = preFilteredRows.length;
 
   return (
     <input
       value={filterValue || ''}
       onChange={e => {
-        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       onClick={e => {
         e.stopPropagation();
       }}
       placeholder={`Search ${count} records...`}
     />
-  )
+  );
 }
 
 function Table({ columns, data, handleDelete, handleClose }) {
   const getRowId = React.useCallback(row => {
     return row.id;
   }, []);
-
-
-
 
   // const defaultColumn = React.useMemo(
   //   () => ({
@@ -102,7 +92,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
     {
       columns,
       data,
-      getRowId
+      getRowId,
     },
     useFilters,
     useSortBy,
@@ -123,27 +113,47 @@ function Table({ columns, data, handleDelete, handleClose }) {
           // to the render a checkbox
           Cell: ({ row }) => (
             <div>
-              <IndeterminateCheckbox onClick={(e) => { e.stopPropagation(); }} {...row.getToggleRowSelectedProps()} />
+              <IndeterminateCheckbox
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+                {...row.getToggleRowSelectedProps()}
+              />
             </div>
           ),
         },
         ...columns,
-      ])
+      ]);
     }
-  )
+  );
   return (
     <>
       <div>
-        <Button onClick={() => { handleClose(selectedFlatRows) }}>Arquivar</Button>
-        <Button onClick={() => { handleDelete(Object.keys(selectedRowIds)) }}> Apagar</Button>
+        <Button
+          onClick={() => {
+            handleClose(selectedFlatRows);
+          }}
+        >
+          Arquivar
+        </Button>
+        <Button
+          onClick={() => {
+            handleDelete(Object.keys(selectedRowIds));
+          }}
+        >
+          {' '}
+          Apagar
+        </Button>
       </div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())} >
-                  {column.render('Header')}{} <div>{column.canFilter ? column.render('Filter') : null}</div>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  {}{' '}
+                  <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>
@@ -153,7 +163,10 @@ function Table({ columns, data, handleDelete, handleClose }) {
           {rows.map((row, _) => {
             prepareRow(row);
             return (
-              <tr className={row.original.closed ? "closedRow" : ""} {...row.getRowProps()}>
+              <tr
+                className={row.original.closed ? 'closedRow' : ''}
+                {...row.getRowProps()}
+              >
                 {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -166,36 +179,36 @@ function Table({ columns, data, handleDelete, handleClose }) {
       </table>
     </>
   );
-};
+}
 
 const Dashboard = () => {
   const [errors, setErrors] = useState([]);
   const auth = useSelector(store => store.auth);
 
-  const getErrors = async function () {
+  const getErrors = async function() {
     const data = await api.get('/errors');
-    console.log(data)
+    console.log(data);
     if (data) setErrors(data.data.data);
-  }
+  };
 
-  const deleteError = async function (RowsIds) {
+  const deleteError = async function(RowsIds) {
     return Promise.all(
       RowsIds.map(async row => {
         await api.delete(`/errors/${row}`);
       })
     );
-  }
+  };
 
-  const toggleCloseError = async function (Rows) {
+  const toggleCloseError = async function(Rows) {
     return Promise.all(
       Rows.map(async data => {
         const newData = data.original;
         newData.closed = !newData.closed;
         debugger;
-        await api.put(`/errors/${data.original.id}`, newData)
+        await api.put(`/errors/${data.original.id}`, newData);
       })
-    )
-  }
+    );
+  };
 
   useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
@@ -206,40 +219,46 @@ const Dashboard = () => {
     {
       Header: 'Level',
       accessor: 'level',
-      Filter: DefaultColumnFilter
+      Filter: DefaultColumnFilter,
     },
     {
       Header: 'Descrição do Erro',
       accessor: 'log',
-      Filter: DefaultColumnFilter
+      Filter: DefaultColumnFilter,
     },
     {
       Header: 'Eventos',
       accessor: 'events',
-      Filter: DefaultColumnFilter
-    }
+      Filter: DefaultColumnFilter,
+    },
   ];
 
   const closeModal = () => {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
-  }
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+  };
 
-  const handleDelete = async function (RowsIds) {
+  const handleDelete = async function(RowsIds) {
     const response = await deleteError(RowsIds);
     getErrors();
-  }
+  };
 
-  const handleClose = async function (Rows) {
+  const handleClose = async function(Rows) {
     const response = await toggleCloseError(Rows);
     getErrors();
-  }
+  };
 
   return (
     <>
       <Header />
       <Container>
-        <Table getId columns={columns} data={errors} handleDelete={handleDelete} handleClose={handleClose} />
+        <Table
+          getId
+          columns={columns}
+          data={errors}
+          handleDelete={handleDelete}
+          handleClose={handleClose}
+        />
         <Modal id="modal">
           <div>
             <p id="modalText" />
@@ -248,7 +267,7 @@ const Dashboard = () => {
         </Modal>
       </Container>
     </>
-  )
+  );
 };
 
 export default Dashboard;

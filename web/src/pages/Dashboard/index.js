@@ -58,6 +58,8 @@ const Dashboard = () => {
   const [errors, setErrors] = useState([]);
   const auth = useSelector(store => store.auth);
 
+  console.log(auth);
+
   const getErrors = async function() {
     const data = await api.get('/errors');
     if (data) setErrors(data.data);

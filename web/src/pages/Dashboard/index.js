@@ -85,9 +85,18 @@ function SelectColumnFilter({
 }
 
 function Table({ columns, data, handleDelete, handleClose }) {
+  const [columnFiltered, setColumnFiltered] = useState(2);
   const getRowId = React.useCallback(row => {
     return row.id;
   }, []);
+
+  function handleFilter(e) {
+    setColumnFiltered(parseInt(e.target.value));
+  }
+
+  // const initialState = {
+  //   hiddenColumns: ['4'],
+  // };
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -151,13 +160,23 @@ function Table({ columns, data, handleDelete, handleClose }) {
         {headerGroups.map((headerGroup, index) => (
           <div className="table-head" key={index}>
             <div>
+              <div>
+                {headerGroup.headers[4].render('Filter')}
+                {(headerGroup.headers[4].isVisible = false)}
+              </div>
+            </div>
+            <div>
               <div>{headerGroup.headers[1].render('Filter')}</div>
             </div>
             <div>
-              <div>{headerGroup.headers[2].render('Filter')}</div>
+              <select id="select-filtered" onChange={handleFilter}>
+                {headerGroup.headers.slice(2).map((x, index) => (
+                  <option value={index + 2}>{x.render('Header')}</option>
+                ))}
+              </select>
             </div>
             <div>
-              <div>{headerGroup.headers[3].render('Filter')}</div>
+              <div>{headerGroup.headers[columnFiltered].render('Filter')}</div>
             </div>
           </div>
         ))}
@@ -188,7 +207,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
                   key={index}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  {column.render('Header')}
+                  {column.id === 'ambient' ? '' : column.render('Header')}
                 </th>
               ))}
             </tr>
@@ -209,7 +228,9 @@ function Table({ columns, data, handleDelete, handleClose }) {
                         to={`/error/${row.original.id}`}
                         style={{ textDecoration: 'none', color: 'black' }}
                       >
-                        {cell.render('Cell')}
+                        {cell.column.id === 'ambient'
+                          ? ''
+                          : cell.render('Cell')}
                       </Link>
                     </td>
                   );
@@ -336,6 +357,11 @@ const Dashboard = () => {
       Header: 'Eventos',
       accessor: 'events',
       Filter: DefaultColumnFilter,
+    },
+    {
+      Header: 'Ambient',
+      accessor: 'ambient',
+      Filter: SelectColumnFilter,
     },
   ];
 

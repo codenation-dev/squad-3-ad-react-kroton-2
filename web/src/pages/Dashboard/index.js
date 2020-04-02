@@ -87,6 +87,11 @@ const Dashboard = () => {
       accessor: 'events',
       Filter: DefaultColumnFilter,
     },
+    {
+      Header: 'Ambient',
+      accessor: 'ambient',
+      Filter: SelectColumnFilter,
+    },
   ];
 
   const handleDelete = async function(RowsIds) {

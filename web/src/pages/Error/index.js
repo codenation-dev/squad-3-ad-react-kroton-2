@@ -31,10 +31,11 @@ const Error = function(props) {
       </Link>
       <div className="title">
         <h1>
-          {error.level} em {error.dateCaptured}
+          {error.title} em {error.dateCaptured}
         </h1>
       </div>
       <div className="content">
+        <h2>{error.level}</h2>
         <h2>Eventos: {error.events}</h2>
         <h4>Log:</h4>
         <p>{error.log}</p>

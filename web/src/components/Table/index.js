@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 import {
   useTable,
   useSortBy,
@@ -7,6 +8,7 @@ import {
   useRowSelect,
   usePagination,
 } from 'react-table';
+
 import {
   FiChevronRight,
   FiChevronsRight,
@@ -15,8 +17,6 @@ import {
   FiArchive,
   FiDelete,
 } from 'react-icons/fi';
-
-import { Button } from './../../styles';
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -45,7 +45,6 @@ function Table({ columns, data, handleDelete, handleClose }) {
     return row.id;
   }, []);
 
-  // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
     getTableBodyProps,
@@ -60,8 +59,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    state: { selectedRowIds, pageIndex, pageSize },
+    state: { selectedRowIds, pageIndex },
   } = useTable(
     {
       columns,
@@ -74,26 +72,16 @@ function Table({ columns, data, handleDelete, handleClose }) {
     usePagination,
     hooks => {
       hooks.visibleColumns.push(columns => [
-        // Let's make a column for selection
         {
           id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
           Cell: ({ row }) => (
             <div>
-              <IndeterminateCheckbox
-                onClick={e => {
-                  e.stopPropagation();
-                }}
-                {...row.getToggleRowSelectedProps()}
-              />
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </div>
           ),
         },
@@ -109,26 +97,32 @@ function Table({ columns, data, handleDelete, handleClose }) {
   return (
     <>
       <div className="table-options">
-        <div className="actions">
-          <Button
-            onClick={() => {
-              handleClose(selectedFlatRows);
-            }}
-          >
-            <FiArchive /> Arquivar
-          </Button>
-          <Button
-            onClick={() => {
-              handleDelete(Object.keys(selectedRowIds));
-            }}
-          >
-            <FiDelete /> Apagar
-          </Button>
-        </div>
+        {Object.keys(selectedRowIds).length > 0 && (
+          <div className="actions">
+            <h4>Ações</h4>
+
+            <button
+              onClick={() => {
+                handleClose(selectedFlatRows);
+              }}
+            >
+              <FiArchive /> Arquivar
+            </button>
+            <button
+              onClick={() => {
+                handleDelete(Object.keys(selectedRowIds));
+              }}
+            >
+              <FiDelete /> Apagar
+            </button>
+          </div>
+        )}
 
         <div className="filters">
+          <h4>Filtros</h4>
+
           {headerGroups.map((headerGroup, index) => (
-            <div className="table-head" key={index}>
+            <>
               {headerGroup.headers[1].render('Filter')}
 
               <select className="select-combo" onChange={handleFilter}>
@@ -137,8 +131,10 @@ function Table({ columns, data, handleDelete, handleClose }) {
                 ))}
               </select>
 
-              {headerGroup.headers[columnFiltered].render('Filter')}
-            </div>
+              {headerGroup.headers[columnFiltered].render('Filter', {
+                placeHolder: 'Pesquise',
+              })}
+            </>
           ))}
         </div>
       </div>
@@ -167,16 +163,19 @@ function Table({ columns, data, handleDelete, handleClose }) {
                 {...row.getRowProps()}
               >
                 {row.cells.map(cell => {
-                  return (
-                    <td {...cell.getCellProps()}>
-                      <Link
-                        to={`/error/${row.original.id}`}
-                        style={{ textDecoration: 'none', color: 'black' }}
-                      >
-                        {cell.render('Cell')}
-                      </Link>
-                    </td>
-                  );
+                  if (cell.column.id === 'selection') {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    );
+                  } else {
+                    return (
+                      <td {...cell.getCellProps()}>
+                        <Link to={`/error/${row.original.id}`}>
+                          {cell.render('Cell')}
+                        </Link>
+                      </td>
+                    );
+                  }
                 })}
               </tr>
             );
@@ -213,39 +212,10 @@ function Table({ columns, data, handleDelete, handleClose }) {
         >
           <FiChevronsRight />
         </button>
-        <span>
-          Page
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>
-        </span>
-        <span>
-          | Go to page:
-          <input
-            type="number"
-            min="1"
-            max={`${pageOptions.length}`}
-            defaultValue={pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-            style={{ width: '100px' }}
-          />
-        </span>
-        <select
-          className="select-combo"
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
+
+        <p>
+          Página {pageIndex + 1} de {pageOptions.length}
+        </p>
       </div>
     </>
   );

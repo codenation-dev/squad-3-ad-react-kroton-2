@@ -1,9 +1,17 @@
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+.navbar {
+  align-items: center;
+  border-bottom: 1px solid #dbdada;
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 50px;
+  width: 100%;
+
+  h1 {
+    color: #333333;
   }
-  100% {
-    transform: rotate(360deg);
+
+  a {
+    font-size: 1rem;
   }
 }
 
@@ -192,10 +200,10 @@
 }
 
 .tablePage {
+  width: 100%;
   display: flex;
-  padding: 40px 80px;
-  margin: 0 auto;
   flex-direction: column;
+  padding: 50px;
 
   table {
     border-spacing: 0;
@@ -218,11 +226,11 @@
       font-family: 'Maven Pro';
 
       &:first-child {
-        border-radius: 8px 0px 0px 8px;
+        border-radius: 4px 0px 0px 4px;
       }
 
       &:last-child {
-        border-radius: 0px 8px 8px 0px;
+        border-radius: 0px 4px 4px 0px;
       }
     }
 
@@ -233,6 +241,11 @@
       white-space: nowrap;
       overflow: hidden;
       max-width: 800px;
+
+      a {
+        text-decoration: none;
+        color: #333333;
+      }
     }
   }
 
@@ -292,42 +305,62 @@
     display: flex;
     margin-bottom: 15px;
 
+    .actions {
+      backface-visibility: visible !important;
+      animation: flipInX 0.5s forwards;
+    }
+
+    .actions,
     .filters {
       display: flex;
+      flex-wrap: wrap;
+
+      h4 {
+        color: #818181;
+        font-size: 1rem;
+        margin-bottom: 5px;
+        width: 100%;
+      }
+
+      button,
+      select {
+        background-color: #ed2e38;
+        border-radius: 4px;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: 'Maven Pro';
+        font-weight: bold;
+        margin-right: 5px;
+        padding: 10px 20px;
+        transition: 0.2s;
+      }
+
+      input {
+        border-radius: 4px;
+        border: 2px solid #dbdada;
+        padding: 10px;
+        transition: 0.2s;
+
+        &:focus {
+          border-color: #ed2e38;
+        }
+      }
     }
   }
 
   .pagination {
     margin-top: 10px;
     text-align: center;
-  }
 
-  .pagination-button {
-    color: white;
-    background-color: #ed2e38;
-    border: none;
-    padding: 2px 4px;
-  }
-
-  .default-filter {
-    margin: 0;
-    margin-left: 30px;
-    margin-bottom: 5px;
-    border: none;
-    border: 1px solid black;
-    padding: 5px 2px;
-    border-radius: 3px;
-    border-bottom: 3px solid #ed2e38;
-  }
-
-  .buttons-container {
-    margin-bottom: 10px;
-  }
-
-  .select-combo {
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    color: white;
+    .pagination-button {
+      background-color: #ed2e38;
+      border-radius: 4px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin: 0px 10px 10px 0px;
+      padding: 8px 10px;
+    }
   }
 }

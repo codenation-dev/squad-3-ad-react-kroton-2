@@ -28,8 +28,6 @@ function DefaultColumnFilter({
 function SelectColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
-  // Calculate the options for filtering
-  // using the preFilteredRows
   const options = React.useMemo(() => {
     const options = new Set();
     preFilteredRows.forEach(row => {
@@ -38,7 +36,6 @@ function SelectColumnFilter({
     return [...options.values()];
   }, [id, preFilteredRows]);
 
-  // Render a multi-select box
   return (
     <select
       className="select-combo"
@@ -66,26 +63,9 @@ const Dashboard = () => {
     if (data) setErrors(data.data);
   };
 
-  const deleteError = async function(RowsIds) {
-    return Promise.all(
-      RowsIds.map(async row => {
-        await api.delete(`/errors/${row}`);
-      })
-    );
-  };
-
-  const toggleCloseError = async function(Rows) {
-    return Promise.all(
-      Rows.map(async data => {
-        const newData = data.original;
-        newData.closed = !newData.closed;
-        await api.put(`/errors/${data.original.id}`, newData);
-      })
-    );
-  };
-
   useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
+
     getErrors();
   }, [auth]);
 
@@ -108,18 +88,31 @@ const Dashboard = () => {
   ];
 
   const handleDelete = async function(RowsIds) {
-    await deleteError(RowsIds);
+    Promise.all(
+      RowsIds.map(async row => {
+        await api.delete(`/errors/${row}`);
+      })
+    );
+
     getErrors();
   };
 
   const handleClose = async function(Rows) {
-    toggleCloseError(Rows);
+    Promise.all(
+      Rows.map(async data => {
+        const newData = data.original;
+        newData.closed = !newData.closed;
+        await api.put(`/errors/${data.original.id}`, newData);
+      })
+    );
+
     getErrors();
   };
 
   return (
     <>
       <Header />
+
       <main className="tablePage">
         <Table
           getId

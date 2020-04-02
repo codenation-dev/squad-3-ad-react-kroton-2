@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
-import { useLocation, Redirect } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { useLocation, Redirect, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
 import { ReactComponent as Eye } from '../assets/images/eye-solid.svg';
@@ -26,7 +26,7 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [errors, setErrors] = useState({});
-  const [cookies, setCookie] = useCookies(['jwt']);
+  const auth = useSelector(store => store.auth);
 
   let query = useQuery();
 
@@ -40,18 +40,6 @@ const SignIn = () => {
     api
       .post('/auth/signin', data)
       .then(response => {
-        if (data.rememberMe) {
-          setCookie('jwt', response.data.token, {
-            path: '/',
-            maxAge: 31536000,
-          });
-        } else {
-          setCookie('jwt', response.data.token, {
-            path: '/',
-            maxAge: -1,
-          });
-        }
-
         dispatch({
           type: '@auth/SIGN_IN',
           payload: {
@@ -96,10 +84,10 @@ const SignIn = () => {
       toast.success('Usuario criado com sucesso!');
     }
 
-    if (cookies.jwt) {
+    if (auth.signed) {
       setRedirect(true);
     }
-  }, [cookies.jwt, query]);
+  }, [auth, query]);
 
   return (
     <section className="auth-page">
@@ -149,19 +137,8 @@ const SignIn = () => {
 
           <div className="form-options">
             <p>
-              Ainda nao tem conta? <a href="/signUp">Cadastre-se</a>
+              Ainda nao tem conta? <Link to="/signUp">Cadastre-se</Link>
             </p>
-
-            <label htmlFor="rememberMe" className="customCheckBox">
-              <input
-                type="checkbox"
-                name="rememberMe"
-                id="rememberMe"
-                ref={register}
-              />
-              <span className="checkmark"></span>
-              Lembrar-me
-            </label>
           </div>
         </form>
       </div>

@@ -1,28 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Content, Profile } from './styles';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export default function Header() {
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleSignOut = function () {
+  const handleSignOut = function() {
+    dispatch({
+      type: '@auth/SIGN_OUT',
+    });
 
-  }
+    setIsLoading(true);
+  };
 
   return (
-    <Container>
-      <Content>
-        <nav>
-        </nav>
+    <>
+      {isLoading && <Redirect to="/" />}
 
-        <aside>
-          <Profile>
-            <div>
-              <Link onClick={handleSignOut} to="/"><strong>Admin Logger</strong></Link>
-              Sair do sistema
-            </div>
-          </Profile>
-        </aside>
-      </Content>
-    </Container>
+      <header className="navbar">
+        <h1>Logger.io</h1>
+
+        <p onClick={handleSignOut}>Sair</p>
+      </header>
+    </>
   );
 }

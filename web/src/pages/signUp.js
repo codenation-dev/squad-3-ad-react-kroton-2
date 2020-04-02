@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { Redirect } from "react-router-dom";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { Redirect, Link } from 'react-router-dom';
 
-import { ReactComponent as Bug } from "../assets/images/bug-solid.svg";
+import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
 
-import api from "../services/api";
+import api from '../services/api';
 
-import "./styles.scss";
-import "react-toastify/dist/ReactToastify.css";
+import './styles.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
   const { register, handleSubmit } = useForm();
@@ -22,7 +22,7 @@ const SignUp = () => {
     setErrors({});
 
     api
-      .post("/auth/signUp", data)
+      .post('/auth/signUp', data)
       .then(() => {
         setRedirect(true);
       })
@@ -40,7 +40,7 @@ const SignUp = () => {
 
           setErrors(errorsObj);
         } catch (error) {
-          toast.error("Erro desconhecido");
+          toast.error('Erro desconhecido');
         }
       });
 
@@ -108,12 +108,12 @@ const SignUp = () => {
           </div>
 
           <button type="submit">
-            {isLoading ? <div className="loader" /> : "Cadastrar-se"}
+            {isLoading ? <div className="loader" /> : 'Cadastrar-se'}
           </button>
 
           <div className="form-options">
             <p>
-              Ja possui conta? <a href="/">Entre agora</a>
+              Ja possui conta? <Link to="/">Entre agora</Link>
             </p>
           </div>
         </form>

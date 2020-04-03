@@ -29,6 +29,10 @@ Factory.blueprint("App/Models/Error", async faker => {
     events: faker.integer({ min: 1, max: 400 }),
     level: faker.pickone(["Error", "Warning", "Debug"]),
     log: faker.paragraph(),
-    closed: faker.pickone([false])
+    closed: faker.pickone([false]),
+    dateCaptured: faker.date({ year: 2020 }),
+    ambient: faker.pickone(["Desenvolvimento", "Homologação", "Produção"]),
+    collectedBy: faker.hash({ length: 25 }),
+    title: faker.sentence({ words: 3 })
   };
 });

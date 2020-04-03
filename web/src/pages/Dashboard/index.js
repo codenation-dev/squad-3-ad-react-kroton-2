@@ -64,6 +64,10 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    document.title = 'Dashboard | Logger.io';
+  }, []);
+
+  useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
 
     getErrors();

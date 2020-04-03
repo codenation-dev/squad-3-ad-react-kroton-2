@@ -58,12 +58,14 @@ const Dashboard = () => {
   const [errors, setErrors] = useState([]);
   const auth = useSelector(store => store.auth);
 
-  console.log(auth);
-
   const getErrors = async function() {
     const data = await api.get('/errors');
     if (data) setErrors(data.data);
   };
+
+  useEffect(() => {
+    document.title = 'Dashboard | Logger.io';
+  }, []);
 
   useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
@@ -101,7 +103,13 @@ const Dashboard = () => {
       })
     );
 
-    getErrors();
+    const updatedErrors = errors.filter(data => {
+      const error = RowsIds.find(el => el == data.id);
+
+      return error ? false : true;
+    });
+
+    setErrors(updatedErrors);
   };
 
   const handleClose = async function(Rows) {
@@ -113,7 +121,20 @@ const Dashboard = () => {
       })
     );
 
-    getErrors();
+    const updatedErrors = errors.map(data => {
+      const error = Rows.find(el => el.original.id === data.id);
+
+      if (error) {
+        return {
+          ...data,
+          closed: data.closed,
+        };
+      } else {
+        return data;
+      }
+    });
+
+    setErrors(updatedErrors);
   };
 
   return (

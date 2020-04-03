@@ -31,4 +31,33 @@
       margin-bottom: 15px;
     }
   }
+
+  .tablePage,
+  .navbar {
+    padding: 25px 15px;
+  }
+
+  .table-options {
+    flex-direction: column-reverse;
+  }
+
+  .tablePage .table-options .filters,
+  .tablePage .table-options .actions {
+    justify-content: space-between;
+  }
+
+  .tablePage .table-options .filters select,
+  .tablePage .table-options .actions button {
+    width: calc(50% - 2.5px);
+    margin-right: 0px;
+  }
+
+  .tablePage .table-options .filters input {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .tablePage .table-options .actions {
+    margin-top: 15px;
+  }
 }

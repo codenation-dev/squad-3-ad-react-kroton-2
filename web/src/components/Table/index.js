@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -141,51 +141,53 @@ function Table({ columns, data, handleDelete, handleClose }) {
         </div>
       </div>
 
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, index) => (
-                <th
-                  key={index}
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
+      <div style={{ overflowX: 'auto', width: '100%' }}>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column, index) => (
+                  <th
+                    key={index}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
+                    {column.id === 'ambient' ? '' : column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, _) => {
+              prepareRow(row);
+              return (
+                <tr
+                  className={row.original.closed ? 'closedRow' : ''}
+                  {...row.getRowProps()}
                 >
-                  {column.id === 'ambient' ? '' : column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row, _) => {
-            prepareRow(row);
-            return (
-              <tr
-                className={row.original.closed ? 'closedRow' : ''}
-                {...row.getRowProps()}
-              >
-                {row.cells.map(cell => {
-                  if (cell.column.id === 'selection') {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                    );
-                  } else {
-                    return (
-                      <td {...cell.getCellProps()}>
-                        <Link to={`/error/${row.original.id}`}>
-                          {cell.column.id === 'ambient'
+                  {row.cells.map(cell => {
+                    if (cell.column.id === 'selection') {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      );
+                    } else {
+                      return (
+                        <td {...cell.getCellProps()}>
+                          <Link to={`/error/${row.original.id}`}>
+                            {cell.column.id === 'ambient'
                             ? ''
                             : cell.render('Cell')}
-                        </Link>
-                      </td>
-                    );
-                  }
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                          </Link>
+                        </td>
+                      );
+                    }
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       <div className="pagination">
         <button

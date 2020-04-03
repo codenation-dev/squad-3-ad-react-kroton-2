@@ -78,6 +78,10 @@ const SignIn = () => {
   };
 
   useEffect(() => {
+    document.title = 'Logger.io';
+  }, []);
+
+  useEffect(() => {
     const newUser = query.get('newuser');
 
     if (newUser) {

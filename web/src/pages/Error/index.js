@@ -17,6 +17,10 @@ const Error = function(props) {
   };
 
   useEffect(() => {
+    document.title = 'Error | Logger.io';
+  }, []);
+
+  useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
     getError();
   }, [auth]);

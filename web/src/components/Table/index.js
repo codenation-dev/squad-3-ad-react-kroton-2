@@ -136,9 +136,12 @@ function Table({ columns, data, handleDelete, handleClose }) {
           {headerGroups.map((headerGroup, index) => (
             <>
               <select className="select-combo" onChange={handleFilter}>
-                {headerGroup.headers.slice(2).map((x, index) => (
-                  <option value={index + 2}>{x.render('Header')}</option>
-                ))}
+                <option value={2}>
+                  {headerGroup.headers[2].render('Header')}
+                </option>
+                <option value={3}>
+                  {headerGroup.headers[3].render('Header')}
+                </option>
               </select>
 
               {headerGroup.headers[columnFiltered].render('Filter', {

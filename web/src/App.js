@@ -1,22 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
 
-import SignIn from "./pages/signIn";
-import SignUp from "./pages/signUp";
+import Routes from './routes';
+
+import { store, persistor } from './store';
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <SignIn />
-        </Route>
-
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Router>
+          <Routes />
+        </Router>
+      </PersistGate>
+    </Provider>
   );
 }
 

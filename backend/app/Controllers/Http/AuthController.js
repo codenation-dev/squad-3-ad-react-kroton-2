@@ -1,24 +1,23 @@
-'use strict'
+"use strict";
 
-const User = use("App/Models/User")
+const User = use("App/Models/User");
 
 class AuthController {
   async signIn({ auth, request }) {
-    const { email, password } = request.all()
+    const { email, password } = request.all();
 
-    const token = await auth.attempt(email, password)
+    const token = await auth.attempt(email, password);
 
-    return token
+    return token;
   }
 
-  async signUp({request}) {
-    const data = request.only(["username", "email", "password"])
+  async signUp({ request }) {
+    const data = request.only(["username", "email", "password"]);
 
-    const user = await User.create(data)
+    const user = await User.create(data);
 
-    return user
- 
+    return user;
   }
 }
 
-module.exports = AuthController
+module.exports = AuthController;

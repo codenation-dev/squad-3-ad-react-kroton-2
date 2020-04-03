@@ -10,8 +10,9 @@
     color: #333333;
   }
 
-  a {
+  p {
     font-size: 1rem;
+    cursor: pointer;
   }
 }
 
@@ -206,6 +207,7 @@
   padding: 50px;
 
   table {
+    width: 100%;
     border-spacing: 0;
     text-align: left;
 

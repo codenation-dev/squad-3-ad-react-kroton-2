@@ -126,7 +126,15 @@ function Table({ columns, data, handleDelete, handleClose }) {
               {headerGroup.headers[4].render('Filter')}
 
               {headerGroup.headers[1].render('Filter')}
+            </>
+          ))}
+        </div>
 
+        <div className="filters">
+          <h4>Pesquisa</h4>
+
+          {headerGroups.map((headerGroup, index) => (
+            <>
               <select className="select-combo" onChange={handleFilter}>
                 {headerGroup.headers.slice(2).map((x, index) => (
                   <option value={index + 2}>{x.render('Header')}</option>
@@ -175,8 +183,8 @@ function Table({ columns, data, handleDelete, handleClose }) {
                         <td {...cell.getCellProps()}>
                           <Link to={`/error/${row.original.id}`}>
                             {cell.column.id === 'ambient'
-                            ? ''
-                            : cell.render('Cell')}
+                              ? ''
+                              : cell.render('Cell')}
                           </Link>
                         </td>
                       );

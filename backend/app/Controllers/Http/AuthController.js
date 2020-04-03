@@ -18,6 +18,12 @@ class AuthController {
 
     return user;
   }
+
+  async getUser({ auth }) {
+    const user = await auth.getUser();
+
+    return user;
+  }
 }
 
 module.exports = AuthController;

@@ -123,6 +123,8 @@ function Table({ columns, data, handleDelete, handleClose }) {
 
           {headerGroups.map((headerGroup, index) => (
             <>
+              {headerGroup.headers[4].render('Filter')}
+
               {headerGroup.headers[1].render('Filter')}
 
               <select className="select-combo" onChange={handleFilter}>
@@ -148,7 +150,7 @@ function Table({ columns, data, handleDelete, handleClose }) {
                   key={index}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  {column.render('Header')}
+                  {column.id === 'ambient' ? '' : column.render('Header')}
                 </th>
               ))}
             </tr>
@@ -171,7 +173,9 @@ function Table({ columns, data, handleDelete, handleClose }) {
                     return (
                       <td {...cell.getCellProps()}>
                         <Link to={`/error/${row.original.id}`}>
-                          {cell.render('Cell')}
+                          {cell.column.id === 'ambient'
+                            ? ''
+                            : cell.render('Cell')}
                         </Link>
                       </td>
                     );

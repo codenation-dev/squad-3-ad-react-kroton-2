@@ -104,7 +104,7 @@ const Dashboard = () => {
     );
 
     const updatedErrors = errors.filter(data => {
-      const error = RowsIds.find(el => el == data.id);
+      const error = RowsIds.find(el => parseInt(el) === data.id);
 
       return error ? false : true;
     });

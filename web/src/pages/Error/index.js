@@ -11,19 +11,19 @@ const Error = function(props) {
   const auth = useSelector(store => store.auth);
   const { id } = useParams();
 
-  const getError = async function() {
-    const data = await api.get(`/errors/${id}`);
-    if (data) setError(data.data);
-  };
-
   useEffect(() => {
     document.title = 'Error | Logger.io';
   }, []);
 
   useEffect(() => {
     api.defaults.headers.Authorization = `Bearer ${auth.token}`;
+    const getError = async function() {
+      const data = await api.get(`/errors/${id}`);
+      if (data) setError(data.data);
+    };
     getError();
-  }, [auth]);
+  }, [auth, id]);
+
   return (
     <div className="error-page">
       <Link to="/dashboard">

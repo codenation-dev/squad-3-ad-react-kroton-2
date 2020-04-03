@@ -128,9 +128,12 @@ function Table({ columns, data, handleDelete, handleClose }) {
               {headerGroup.headers[1].render('Filter')}
 
               <select className="select-combo" onChange={handleFilter}>
-                {headerGroup.headers.slice(2).map((x, index) => (
-                  <option value={index + 2}>{x.render('Header')}</option>
-                ))}
+                <option value={2}>
+                  {headerGroup.headers[2].render('Header')}
+                </option>
+                <option value={3}>
+                  {headerGroup.headers[3].render('Header')}
+                </option>
               </select>
 
               {headerGroup.headers[columnFiltered].render('Filter', {
@@ -175,8 +178,8 @@ function Table({ columns, data, handleDelete, handleClose }) {
                         <td {...cell.getCellProps()}>
                           <Link to={`/error/${row.original.id}`}>
                             {cell.column.id === 'ambient'
-                            ? ''
-                            : cell.render('Cell')}
+                              ? ''
+                              : cell.render('Cell')}
                           </Link>
                         </td>
                       );

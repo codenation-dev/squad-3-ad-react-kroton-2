@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "http://localhost:3333",
-  timeout: 10000
+  baseURL: process.env.REACT_APP_NOT_SECRET_CODE,
+  timeout: 10000,
 });
 
 export default api;

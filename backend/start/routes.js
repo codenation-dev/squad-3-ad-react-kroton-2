@@ -18,6 +18,10 @@ const Route = use("Route");
 
 Route.post("/auth/signin", "AuthController.signIn").validator("SignInUser");
 Route.post("/auth/signup", "AuthController.signUp").validator("SignUpUser");
+Route.post("/auth/recover", "RequestPasswordController.store");
+Route.put("/auth/recover/:token", "RequestPasswordController.update");
+
+Route.post("/auth/getuser", "AuthController.getUser").middleware(["auth"]);
 
 Route.get("/errors", "ErrorController.index").middleware(["auth"]);
 Route.post("/errors", "ErrorController.store").validator("Error");

@@ -1,31 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { useLocation, Redirect } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { useLocation, Redirect, Link } from 'react-router-dom';
 
-import { ReactComponent as Bug } from "../assets/images/bug-solid.svg";
-import { ReactComponent as Eye } from "../assets/images/eye-solid.svg";
-import { ReactComponent as EyeSlash } from "../assets/images/eye-slash-solid.svg";
+import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
+import { ReactComponent as Eye } from '../assets/images/eye-solid.svg';
+import { ReactComponent as EyeSlash } from '../assets/images/eye-slash-solid.svg';
 
-import api from "../services/api";
+import api from '../services/api';
 
-import "./styles.scss";
+import './styles.scss';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+
   const { register, handleSubmit } = useForm();
 
+  const [toastShow, setToastShow] = useState(false);
   const [password, setPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [errors, setErrors] = useState({});
-  const [cookies, setCookie] = useCookies(["jwt"]);
+  const auth = useSelector(store => store.auth);
 
-  let query = useQuery();
+  const query = useQuery();
 
   const handleTogglePassword = () => {
     setPassword(!password);
@@ -35,37 +38,37 @@ const SignIn = () => {
     setIsLoading(true);
 
     api
-      .post("/auth/signin", data)
+      .post('/auth/signin', data)
       .then(response => {
-        if (data.rememberMe) {
-          setCookie("jwt", response.data.token, {
-            path: "/",
-            maxAge: 31536000
+        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+
+        api.post('/auth/getuser').then(user => {
+          dispatch({
+            type: '@auth/SIGN_IN',
+            payload: {
+              token: response.data.token,
+              userName: user.data.username,
+            },
           });
-        } else {
-          setCookie("jwt", response.data.token, {
-            path: "/",
-            maxAge: -1
-          });
-        }
+        });
 
         setRedirect(true);
       })
-      .catch(errors => {
-        const inputErrors = errors.response.data.filter(err => {
+      .catch(errorsResponse => {
+        const inputErrors = errorsResponse.response.data.filter(err => {
           return err.field !== undefined;
         });
 
-        let errorsObj = {};
+        const errorsObj = {};
 
         for (let i = 0; i < inputErrors.length; i++) {
           switch (inputErrors[i].field) {
-            case "email":
+            case 'email':
               errorsObj[inputErrors[i].field] =
-                "E-mail não encontrado ou incorreto";
+                'E-mail não encontrado ou incorreto';
               break;
-            case "password":
-              errorsObj[inputErrors[i].field] = "Senha incorreta";
+            case 'password':
+              errorsObj[inputErrors[i].field] = 'Senha incorreta';
               break;
             default:
               errorsObj[inputErrors[i].field] = inputErrors[i].message;
@@ -80,16 +83,21 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    const newUser = query.get("newuser");
+    document.title = 'Logger.io';
+  }, []);
 
-    if (newUser) {
-      toast.success("Usuario criado com sucesso!");
+  useEffect(() => {
+    const newUser = query.get('newuser');
+
+    if (newUser && !toastShow) {
+      setToastShow(true);
+      toast.success('Usuario criado com sucesso!');
     }
 
-    if (cookies.jwt) {
+    if (auth.signed) {
       setRedirect(true);
     }
-  }, []);
+  }, [auth, query, toastShow]);
 
   return (
     <section className="auth-page">
@@ -117,7 +125,7 @@ const SignIn = () => {
           <div className="form-divisor">
             <label htmlFor="password">Senha</label>
             <input
-              type={password ? "text" : "password"}
+              type={password ? 'text' : 'password'}
               name="password"
               id="password"
               ref={register}
@@ -134,24 +142,18 @@ const SignIn = () => {
           </div>
 
           <button type="submit">
-            {isLoading ? <div className="loader" /> : "Entrar"}
+            {isLoading ? <div className="loader" /> : 'Entrar'}
           </button>
 
           <div className="form-options">
             <p>
-              Ainda nao tem conta? <a href="/signUp">Cadastre-se</a>
+              Ainda não tem conta? <Link to="/signUp">Cadastre-se.</Link>
             </p>
-
-            <label htmlFor="rememberMe" className="customCheckBox">
-              <input
-                type="checkbox"
-                name="rememberMe"
-                id="rememberMe"
-                ref={register}
-              />
-              <span className="checkmark"></span>
-              Lembrar-me
-            </label>
+          </div>
+          <div className="form-options">
+            <p>
+              Esqueceu sua senha? <Link to="/recovery">Clique aqui.</Link>
+            </p>
           </div>
         </form>
       </div>

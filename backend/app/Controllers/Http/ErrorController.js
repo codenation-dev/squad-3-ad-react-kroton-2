@@ -19,11 +19,12 @@ class ErrorController {
    */
   async index({ auth, request }) {
     const user = await auth.getUser();
-    const { page = 1, perpage = 10 } = request.all();
+    // const { page = 1, perpage = 10 } = request.all();
 
     const errors = await ErrorModel.query()
       .where({ userToken: user.token })
-      .paginate(page, perpage);
+      .fetch();
+    // .paginate(page, perpage);
 
     return errors || [];
   }
@@ -95,7 +96,7 @@ class ErrorController {
    */
   async update({ auth, params, request, response }) {
     const user = await auth.getUser();
-    const data = request.only(["errorNumber", "level", "log"]);
+    const data = request.only(["closed"]);
     const id = params.id;
 
     const error = await ErrorModel.find(id);
@@ -112,7 +113,7 @@ class ErrorController {
   }
 
   /**
-   * Delete a error with id.
+   * Delete an error with id.
    * DELETE errors/:id
    *
    * @param {object} ctx

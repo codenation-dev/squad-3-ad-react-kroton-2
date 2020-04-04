@@ -1,30 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
 
-import SignIn from "./pages/signIn";
-import SignUp from "./pages/signUp";
-import Dashboard from "./pages/dashboard";
+import Routes from './routes';
+
+import { store, persistor } from './store';
 
 function App() {
   return (
-    <CookiesProvider>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <SignIn />
-          </Route>
-
-          <Route path="/signup">
-            <SignUp />
-          </Route>
-
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-        </Switch>
-      </Router>
-    </CookiesProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Router>
+          <Routes />
+        </Router>
+      </PersistGate>
+    </Provider>
   );
 }
 

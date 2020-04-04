@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { Redirect, Link } from 'react-router-dom';
 
-import { ReactComponent as Bug } from "../assets/images/bug-solid.svg";
+import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
 
-import api from "../services/api";
+import api from '../services/api';
 
-import "./styles.scss";
-import "react-toastify/dist/ReactToastify.css";
+import './styles.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
   const { register, handleSubmit } = useForm();
@@ -21,31 +21,42 @@ const SignUp = () => {
     setIsLoading(true);
     setErrors({});
 
-    api
-      .post("/auth/signUp", data)
-      .then(() => {
-        setRedirect(true);
-      })
-      .catch(errors => {
-        try {
-          const inputErrors = errors.response.data.filter(err => {
-            return err.field !== undefined;
-          });
-
-          let errorsObj = {};
-
-          for (let i = 0; i < inputErrors.length; i++) {
-            errorsObj[inputErrors[i].field] = inputErrors[i].message;
-          }
-
-          setErrors(errorsObj);
-        } catch (error) {
-          toast.error("Erro desconhecido");
-        }
+    if (data.password !== data.confirmPassword) {
+      setErrors({
+        password: 'Senhas não coincidem',
+        confirmPassword: 'Senhas não coincidem',
       });
+    } else {
+      api
+        .post('/auth/signUp', data)
+        .then(() => {
+          setRedirect(true);
+        })
+        .catch(errorsResponse => {
+          try {
+            const inputErrors = errorsResponse.response.data.filter(err => {
+              return err.field !== undefined;
+            });
+
+            const errorsObj = {};
+
+            for (let i = 0; i < inputErrors.length; i++) {
+              errorsObj[inputErrors[i].field] = inputErrors[i].message;
+            }
+
+            setErrors(errorsObj);
+          } catch (error) {
+            toast.error('Erro desconhecido');
+          }
+        });
+    }
 
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    document.title = 'Cadastrar | Logger.io';
+  }, []);
 
   return (
     <section className="auth-page">
@@ -105,15 +116,17 @@ const SignUp = () => {
               ref={register}
               required
             />
+
+            {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
           </div>
 
           <button type="submit">
-            {isLoading ? <div className="loader" /> : "Cadastrar-se"}
+            {isLoading ? <div className="loader" /> : 'Cadastrar-se'}
           </button>
 
           <div className="form-options">
             <p>
-              Ja possui conta? <a href="/">Entre agora</a>
+              Ja possui conta? <Link to="/">Entre agora</Link>
             </p>
           </div>
         </form>

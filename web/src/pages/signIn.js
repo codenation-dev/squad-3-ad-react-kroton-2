@@ -146,7 +146,12 @@ const SignIn = () => {
 
           <div className="form-options">
             <p>
-              Ainda nao tem conta? <Link to="/signUp">Cadastre-se</Link>
+              Ainda não tem conta? <Link to="/signUp">Cadastre-se.</Link>
+            </p>
+          </div>
+          <div className="form-options">
+            <p>
+              Esqueceu sua senha? <Link to="/recovery">Clique aqui.</Link>
             </p>
           </div>
         </form>

@@ -1,51 +1,61 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 
 import api from '../../services/api';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { ReactComponent as Bug } from '../../assets/images/bug-solid.svg';
+import { ReactComponent as Eye } from '../../assets/images/eye-solid.svg';
+import { ReactComponent as EyeSlash } from '../../assets/images/eye-slash-solid.svg';
 
-function RecoverPassword() {
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+function ChangePassword() {
   const [isLoading, setLoading] = useState(false);
+  const [password, setPassword] = useState(false);
+  const query = useQuery();
+
+  const handleTogglePassword = () => {
+    setPassword(!password);
+  };
 
   const { register, handleSubmit } = useForm();
 
   const history = useHistory();
 
-  async function pwRecovery(data) {
+  async function pwChange(data) {
     setLoading(true);
     try {
       const schema = Yup.object().shape({
-        email: Yup.string()
-          .email('Por favor, digite um e-mail válido')
-          .required('Por favor, digite o seu email'),
+        password: Yup.string()
+          .min(6, 'Por favor, digite uma senha 6 caracts.')
+          .required('Por favor, digite uma senha segura'),
       });
       await schema.validate(data, {
         abortEarly: false,
       });
-      // Validation passed
-      await api.post('/auth/recover', {
-        ...data,
-        redirect: `http://localhost:3000/change`,
-      });
+
+      await api.put(`/auth/recover/${query.get('token')}`, data);
+
       const msg = (
         <div>
-          <strong>Encontramos seu email!</strong>
+          <strong>Sua senha foi alterada com sucesso!</strong>
           <br />
-          <span>
-            Por favor, verifique sua caixa de entrada para trocar a sua senha
-          </span>
+          <span>Vá para a página de login para acessar sua conta</span>
         </div>
       );
       toast.success(msg);
     } catch (err) {
       toast.error(
         <div>
-          <strong>Tem certeza que seu e-mail está correto?</strong>{' '}
-          <span>Por favor, verifique o email e tente novamente.</span>
+          <strong>Houve um problema com o token</strong>{' '}
+          <span>
+            Por favor, use o link no email recebido e tente novamente.
+          </span>
         </div>
       );
     } finally {
@@ -57,7 +67,7 @@ function RecoverPassword() {
   return (
     <section className="auth-page">
       <div className="bg-fade">
-        <form className="auth-form" onSubmit={handleSubmit(pwRecovery)}>
+        <form className="auth-form" onSubmit={handleSubmit(pwChange)}>
           <header className="form-header">
             <Bug />
           </header>
@@ -65,14 +75,20 @@ function RecoverPassword() {
           <h1 className="form-title">Recupere sua senha</h1>
 
           <div className="form-divisor">
-            <label htmlFor="email">E-Mail</label>
+            <label htmlFor="password">Digite uma nova senha</label>
             <input
-              type="email"
-              name="email"
-              id="email"
+              type={password ? 'text' : 'password'}
+              name="password"
+              id="password"
               ref={register}
               required
             />
+
+            {password ? (
+              <EyeSlash onClick={() => handleTogglePassword()} />
+            ) : (
+              <Eye onClick={() => handleTogglePassword()} />
+            )}
           </div>
 
           <button type="submit">
@@ -92,4 +108,4 @@ function RecoverPassword() {
   );
 }
 
-export default RecoverPassword;
+export default ChangePassword;

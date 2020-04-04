@@ -1,5 +1,8 @@
 "use strict";
 
+/** @type {import('@adonisjs/framework/src/Env')} */
+const Env = use("Env");
+
 /** @type {import('@adonisjs/framework/src/Hash')} */
 const Hash = use("Hash");
 
@@ -12,7 +15,7 @@ const User = use("App/Models/User");
 class RequestPasswordController {
   async store({ request: req }) {
     try {
-      const { email, redirect = `${process.env.APP_URL}/recovery` } = req.all();
+      const { email, redirect = `${Env.get("APP_URL")}/change` } = req.all();
 
       const user = await User.query().where({ email }).first();
 
@@ -84,7 +87,7 @@ class RequestPasswordController {
       await user.merge({
         recovery_token: null,
         recovery_token_date: null,
-        password: await Hash.make(password),
+        password: password,
       });
 
       await user.save();

@@ -127,7 +127,15 @@ function Table({ columns, data, handleDelete, handleClose }) {
               {headerGroup.headers[4].render('Filter')}
 
               {headerGroup.headers[1].render('Filter')}
+            </>
+          ))}
+        </div>
 
+        <div className="filters">
+          <h4>Pesquisa</h4>
+
+          {headerGroups.map((headerGroup, index) => (
+            <>
               <select className="select-combo" onChange={handleFilter}>
                 <option value={2}>
                   {headerGroup.headers[2].render('Header')}

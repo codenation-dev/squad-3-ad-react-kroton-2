@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Header() {
   const [isLoading, setIsLoading] = useState(false);
+  const auth = useSelector(store => store.auth);
   const dispatch = useDispatch();
 
   const handleSignOut = function() {
@@ -21,7 +22,9 @@ export default function Header() {
       <header className="navbar">
         <h1>Logger.io</h1>
 
-        <p onClick={handleSignOut}>Sair</p>
+        <p>
+          Olá {auth.userName}, <span onClick={handleSignOut}>Sair</span>
+        </p>
       </header>
     </>
   );

@@ -12,7 +12,11 @@
 
   p {
     font-size: 1rem;
-    cursor: pointer;
+
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 }
 
@@ -318,24 +322,28 @@
       flex-wrap: wrap;
 
       h4 {
-        color: #818181;
+        color: #333333;
         font-size: 1rem;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         width: 100%;
       }
 
       button,
       select {
-        background-color: #ed2e38;
+        align-items: center;
         border-radius: 4px;
         border: none;
-        color: #ffffff;
+        color: #818181;
         cursor: pointer;
+        display: flex;
         font-family: 'Maven Pro';
         font-weight: bold;
         margin-right: 5px;
         padding: 10px 20px;
-        transition: 0.2s;
+
+        svg {
+          margin-right: 10px;
+        }
       }
 
       input {
@@ -345,7 +353,7 @@
         transition: 0.2s;
 
         &:focus {
-          border-color: #ed2e38;
+          border-color: #818181;
         }
       }
     }

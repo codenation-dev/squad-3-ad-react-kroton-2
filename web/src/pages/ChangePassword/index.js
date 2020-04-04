@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import api from '../../services/api';
 import { ToastContainer, toast } from 'react-toastify';
@@ -24,8 +24,6 @@ function ChangePassword() {
   };
 
   const { register, handleSubmit } = useForm();
-
-  const history = useHistory();
 
   async function pwChange(data) {
     setLoading(true);
@@ -60,7 +58,6 @@ function ChangePassword() {
       );
     } finally {
       setLoading(false);
-      setTimeout(() => history.push('/'), 8000);
     }
   }
 

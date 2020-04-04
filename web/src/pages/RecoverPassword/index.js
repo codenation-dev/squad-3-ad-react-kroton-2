@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,8 +12,6 @@ function RecoverPassword() {
   const [isLoading, setLoading] = useState(false);
 
   const { register, handleSubmit } = useForm();
-
-  const history = useHistory();
 
   async function pwRecovery(data) {
     setLoading(true);
@@ -50,7 +48,6 @@ function RecoverPassword() {
       );
     } finally {
       setLoading(false);
-      setTimeout(() => history.push('/'), 8000);
     }
   }
 

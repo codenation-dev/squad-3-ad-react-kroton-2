@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_NOT_SECRET_CODE,
+  baseURL: process.env.REACT_APP_API_ENDPOINT,
   timeout: 10000,
 });
 

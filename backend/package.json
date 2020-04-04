@@ -33,6 +33,7 @@
     "nanoid": "^2.1.11",
     "nodemailer": "^6.4.6",
     "nodemailer-express-handlebars": "^4.0.0",
+    "nvm": "0.0.4",
     "pg": "^7.18.2",
     "url-parse": "^1.4.7"
   },

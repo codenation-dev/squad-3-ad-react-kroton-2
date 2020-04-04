@@ -21,28 +21,35 @@ const SignUp = () => {
     setIsLoading(true);
     setErrors({});
 
-    api
-      .post('/auth/signUp', data)
-      .then(() => {
-        setRedirect(true);
-      })
-      .catch(errors => {
-        try {
-          const inputErrors = errors.response.data.filter(err => {
-            return err.field !== undefined;
-          });
-
-          let errorsObj = {};
-
-          for (let i = 0; i < inputErrors.length; i++) {
-            errorsObj[inputErrors[i].field] = inputErrors[i].message;
-          }
-
-          setErrors(errorsObj);
-        } catch (error) {
-          toast.error('Erro desconhecido');
-        }
+    if (data.password !== data.confirmPassword) {
+      setErrors({
+        password: 'Senhas não coincidem',
+        confirmPassword: 'Senhas não coincidem',
       });
+    } else {
+      api
+        .post('/auth/signUp', data)
+        .then(() => {
+          setRedirect(true);
+        })
+        .catch(errorsResponse => {
+          try {
+            const inputErrors = errorsResponse.response.data.filter(err => {
+              return err.field !== undefined;
+            });
+
+            const errorsObj = {};
+
+            for (let i = 0; i < inputErrors.length; i++) {
+              errorsObj[inputErrors[i].field] = inputErrors[i].message;
+            }
+
+            setErrors(errorsObj);
+          } catch (error) {
+            toast.error('Erro desconhecido');
+          }
+        });
+    }
 
     setIsLoading(false);
   };
@@ -109,6 +116,8 @@ const SignUp = () => {
               ref={register}
               required
             />
+
+            {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
           </div>
 
           <button type="submit">

@@ -21,6 +21,8 @@ Route.post("/auth/signup", "AuthController.signUp").validator("SignUpUser");
 Route.post("/auth/recover", "RequestPasswordController.store");
 Route.put("/auth/recover/:token", "RequestPasswordController.update");
 
+Route.post("/auth/getuser", "AuthController.getUser").middleware(["auth"]);
+
 Route.get("/errors", "ErrorController.index").middleware(["auth"]);
 Route.post("/errors", "ErrorController.store").validator("Error");
 Route.get("/errors/:id", "ErrorController.show").middleware(["auth"]);

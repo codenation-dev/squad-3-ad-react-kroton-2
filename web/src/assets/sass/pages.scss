@@ -12,7 +12,11 @@
 
   p {
     font-size: 1rem;
-    cursor: pointer;
+
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 }
 
@@ -318,24 +322,28 @@
       flex-wrap: wrap;
 
       h4 {
-        color: #818181;
+        color: #333333;
         font-size: 1rem;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         width: 100%;
       }
 
       button,
       select {
-        background-color: #ed2e38;
+        align-items: center;
         border-radius: 4px;
         border: none;
-        color: #ffffff;
+        color: #818181;
         cursor: pointer;
+        display: flex;
         font-family: 'Maven Pro';
         font-weight: bold;
         margin-right: 5px;
         padding: 10px 20px;
-        transition: 0.2s;
+
+        svg {
+          margin-right: 10px;
+        }
       }
 
       input {
@@ -345,7 +353,7 @@
         transition: 0.2s;
 
         &:focus {
-          border-color: #ed2e38;
+          border-color: #818181;
         }
       }
     }
@@ -372,42 +380,36 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  width: 100%;
+  padding: 50px;
 
   .back {
-    margin-left: 50px;
+    text-decoration: none;
     margin-top: 40px;
     background-color: #ed2e38;
     border: none;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 4px;
+    padding: 10px 20px;
     color: white;
     font-family: 'Maven Pro';
     font-weight: bold;
-
-    :hover {
-      background-color: white;
-      border: 1px solid #ed2e38;
-      border-radius: 5px;
-      padding: 4px;
-      color: #ed2e38;
-      cursor: pointer;
-      transition: 0.5s;
-    }
   }
 
   .title {
     margin-top: 15px;
-    margin-left: 50px;
     margin-bottom: 20px;
-    padding: 5px 20px;
-    width: 80%;
+    padding: 20px;
+    border-radius: 4px;
+    width: 100%;
     color: white;
     background: #ed2e38;
   }
 
   .content {
-    margin-left: 65px;
-    width: 80%;
+    background: #eee;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -415,6 +417,7 @@
 
     .center {
       width: 50%;
+      margin-top: 30px;
 
       h4 {
         margin-top: 10px;
@@ -422,12 +425,25 @@
     }
 
     aside {
+      margin-top: 10px;
       h2 {
-        padding: 5px;
+        text-align: center;
+        padding: 10px 20px;
         display: table;
+        border-radius: 4px;
+        width: 100%;
         background: #ed2e38;
         color: white;
         margin-bottom: 10px;
+        margin-right: 10px;
+      }
+
+      h3 {
+        text-align: center;
+        padding: 10px 20px;
+        width: 100%;
+        background: #ccc;
+        margin-right: 30px;
       }
     }
   }

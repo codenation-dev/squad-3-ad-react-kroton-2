@@ -40,11 +40,16 @@ const SignIn = () => {
     api
       .post('/auth/signin', data)
       .then(response => {
-        dispatch({
-          type: '@auth/SIGN_IN',
-          payload: {
-            token: response.data.token,
-          },
+        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+
+        api.post('/auth/getuser').then(user => {
+          dispatch({
+            type: '@auth/SIGN_IN',
+            payload: {
+              token: response.data.token,
+              userName: user.data.username,
+            },
+          });
         });
 
         setRedirect(true);

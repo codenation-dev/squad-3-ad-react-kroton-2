@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, Redirect, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { ReactComponent as Bug } from '../assets/images/bug-solid.svg';
 import { ReactComponent as Eye } from '../assets/images/eye-solid.svg';
@@ -22,13 +21,14 @@ const SignIn = () => {
 
   const { register, handleSubmit } = useForm();
 
+  const [toastShow, setToastShow] = useState(false);
   const [password, setPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [errors, setErrors] = useState({});
   const auth = useSelector(store => store.auth);
 
-  let query = useQuery();
+  const query = useQuery();
 
   const handleTogglePassword = () => {
     setPassword(!password);
@@ -54,12 +54,12 @@ const SignIn = () => {
 
         setRedirect(true);
       })
-      .catch(errors => {
-        const inputErrors = errors.response.data.filter(err => {
+      .catch(errorsResponse => {
+        const inputErrors = errorsResponse.response.data.filter(err => {
           return err.field !== undefined;
         });
 
-        let errorsObj = {};
+        const errorsObj = {};
 
         for (let i = 0; i < inputErrors.length; i++) {
           switch (inputErrors[i].field) {
@@ -89,14 +89,15 @@ const SignIn = () => {
   useEffect(() => {
     const newUser = query.get('newuser');
 
-    if (newUser) {
+    if (newUser && !toastShow) {
+      setToastShow(true);
       toast.success('Usuario criado com sucesso!');
     }
 
     if (auth.signed) {
       setRedirect(true);
     }
-  }, [auth, query]);
+  }, [auth, query, toastShow]);
 
   return (
     <section className="auth-page">

@@ -29,7 +29,7 @@ const Error = function(props) {
   return (
     <>
       <Header />
-      <div className="error-page">
+      <div className="error-page error-container">
         <Link className="back" to="/dashboard">
           Voltar
         </Link>

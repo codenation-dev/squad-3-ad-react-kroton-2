@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
 
 import {
   useTable,
@@ -155,6 +156,19 @@ function Table({ columns, data, handleDelete, handleClose }) {
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                   >
                     {column.id === 'ambient' ? '' : column.render('Header')}
+                    {['level', 'log', 'events'].includes(column.id) ? (
+                      column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <FaSortDown />
+                        ) : (
+                          <FaSortUp />
+                        )
+                      ) : (
+                        <FaSort />
+                      )
+                    ) : (
+                      ''
+                    )}
                   </th>
                 ))}
               </tr>
